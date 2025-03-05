@@ -1,3 +1,4 @@
+// Updated `vite.config.ts`
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import themePlugin from "@replit/vite-plugin-shadcn-theme-json";
@@ -9,7 +10,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export default defineConfig({
-  // Add this base path for GitHub Pages - critical fix
+  // Base path for GitHub Pages - critical fix
   base: '/Healio-version-1/',
 
   plugins: [
@@ -20,7 +21,7 @@ export default defineConfig({
     process.env.REPL_ID !== undefined
       ? [
           await import("@replit/vite-plugin-cartographer").then((m) =>
-            m.cartographer(),
+            m.cartographer()
           ),
         ]
       : []),
@@ -33,11 +34,25 @@ export default defineConfig({
     },
   },
 
+  css: {
+    // CSS options for Tailwind CSS and optimizing responsive design
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@import "@/styles/_global.scss";`, // Handles shared styles across app
+      },
+    },
+  },
+
   root: path.resolve(__dirname, "client"),
-  
+
   build: {
-    // Simplified output directory for GitHub Pages deployment
     outDir: path.resolve(__dirname, "dist"),
     emptyOutDir: true,
   },
+
+  server: {
+    // Live reload for better testing on mobile devices
+    host: "0.0.0.0",
+    port: 3000,
+  }
 });
